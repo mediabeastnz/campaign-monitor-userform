@@ -49,7 +49,7 @@ class EditableCampaignMonitorField extends EditableFormField {
 
         $fields->addFieldsToTab("Root.Main", array(
             LiteralField::create("CampaignMonitorStart", "<h4>Campaign Monitor Configuration</h4>")->setAttribute("disabled", $fieldsStatus),
-            DropdownField::create("ListID", 'Subscripers List', $this->getLists()->map("ListID", "Name"))
+            DropdownField::create("ListID", 'Subscribers List', $this->getLists()->map("ListID", "Name"))
                 ->setEmptyString("Choose a Campaign Monitor List")
                 ->setAttribute("disabled", $fieldsStatus),
             DropdownField::create("EmailField", 'Email Field', $currentFromFields)->setAttribute("disabled", $fieldsStatus),
