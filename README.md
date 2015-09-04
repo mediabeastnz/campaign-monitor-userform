@@ -20,3 +20,6 @@ EditableCampaignMonitorField:
 + add extension points e.g. Custom fields, change field type
 + Better error message is something goes wrong
 + Added supoport for submission data e.g. Submission shows user was subscribed.
++
+
+![field configuration example](http://i.imgur.com/3mBgSRq.png)
