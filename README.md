@@ -25,9 +25,9 @@ EditableCampaignMonitorField:
     defaultFieldType: 'DropdownField'
 ```
 There are currently 3 extension hooks which can be useful to handle data before and after saving.
-+ beforeValueFromData
-+ afterValueFromData
-+ updateLists
++ `$this->extend('beforeValueFromData', $data)`
++ `$this->extend('afterValueFromData', $data)`
++ `$this->extend('updateLists', $data)`
 
 #### TODO
 + ~~add extension points e.g. Custom fields, change field type~~
