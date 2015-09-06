@@ -19,9 +19,10 @@ EditableCampaignMonitorField:
 #####Customisation
 You can also change what type of field is actually used on the UserForm.
 By Default it's a checkbox field. You can change this via your config.yml.
+If you choose to use a dropwdown field you can add options under the Custom Options tab.
 ```
 EditableCampaignMonitorField:
-    defaultFieldType: 'CheckboxSetField'
+    defaultFieldType: 'DropdownField'
 ```
 There are currently 3 extension hooks which can be useful to handle data before and after saving.
 + beforeValueFromData
