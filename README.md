@@ -31,7 +31,7 @@ There are currently 3 extension hooks which can be useful to handle data before 
 
 #### TODO
 + ~~add extension points e.g. Custom fields, change field type~~
-+ Better error message is something goes wrong
 + ~~Added supoport for submission data e.g. Submission shows user was subscribed.~~
++ Better error message is something goes wrong
 
 ![field configuration example](http://i.imgur.com/3mBgSRq.png)
