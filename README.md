@@ -1,4 +1,4 @@
-#campaign-monitor-userform
+#Campaign Monitor UserForm Field
 Adds a custom field to UserForms which allows you to select a
 list from campaign monitor, set custom fields and subscribe on submission.
 
@@ -16,10 +16,21 @@ EditableCampaignMonitorField:
 ```
 ^ These setting can be found in client settings area in Campaign Monitor.
 
+#####Customisation
+You can also change what type of field is actually used on the UserForm.
+By Default it's a checkbox field. You can change this via your config.yml.
+```
+EditableCampaignMonitorField:
+    defaultFieldType: 'CheckboxSetField'
+```
+There are currently 3 extension hooks which can be useful to handle data before and after saving.
++ beforeValueFromData
++ afterValueFromData
++ updateLists
+
 #### TODO
-+ add extension points e.g. Custom fields, change field type
++ ~~add extension points e.g. Custom fields, change field type~~
 + Better error message is something goes wrong
-+ Added supoport for submission data e.g. Submission shows user was subscribed.
-+
++ ~~Added supoport for submission data e.g. Submission shows user was subscribed.~~
 
 ![field configuration example](http://i.imgur.com/3mBgSRq.png)
