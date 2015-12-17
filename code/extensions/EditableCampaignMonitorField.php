@@ -10,26 +10,26 @@
 class EditableCampaignMonitorField extends EditableFormField
 {
     /**
-	 * @var string
-	 */
+     * @var string
+     */
     private static $singular_name = 'Campaign Monitor Signup Field';
 
     /**
-	 * @var string
-	 */
+     * @var string
+     */
     private static $plural_name = 'Campaign Monitor Signup Fields';
 
     /**
-	 * Set default field type, enabled override via Config
-	 *
-	 * @var array
-	 * @config
-	 */
+     * Set default field type, enabled override via Config
+     *
+     * @var array
+     * @config
+     */
     private static $defaultFieldType = "CheckboxField";
 
     /**
-	 * @var array Fields on the user defined form page.
-	 */
+     * @var array Fields on the user defined form page.
+     */
     private static $db = array(
         'ListID' => 'Varchar(255)',
         'EmailField' => 'Varchar(255)',
@@ -38,16 +38,17 @@ class EditableCampaignMonitorField extends EditableFormField
     );
 
     /**
-	 * @var array
-	 */
+     * @var array
+     */
     private static $has_many = array(
-		"CustomOptions" => "EditableCustomOption"
-	);
+        "CustomOptions" => "EditableCustomOption"
+    );
 
     /**
      * @return FieldList
      */
-    public function getCMSFields() {
+    public function getCMSFields()
+    {
         $fields = parent::getCMSFields();
 
         // get current user form fields
@@ -71,38 +72,38 @@ class EditableCampaignMonitorField extends EditableFormField
         ), 'Type');
 
         $editableColumns = new GridFieldEditableColumns();
-		$editableColumns->setDisplayFields(array(
-			'Title' => array(
-				'title' => 'Title',
-				'callback' => function($record, $column, $grid) {
-					return TextField::create($column);
-				}
-			),
-			'Default' => array(
-				'title' => _t('EditableMultipleOptionField.DEFAULT', 'Selected by default?'),
-				'callback' => function($record, $column, $grid) {
-					return CheckboxField::create($column);
-				}
-			)
-		));
+        $editableColumns->setDisplayFields(array(
+            'Title' => array(
+                'title' => 'Title',
+                'callback' => function ($record, $column, $grid) {
+                    return TextField::create($column);
+                }
+            ),
+            'Default' => array(
+                'title' => _t('EditableMultipleOptionField.DEFAULT', 'Selected by default?'),
+                'callback' => function ($record, $column, $grid) {
+                    return CheckboxField::create($column);
+                }
+            )
+        ));
 
         $optionsConfig = GridFieldConfig::create()
-			->addComponents(
-				new GridFieldToolbarHeader(),
-				new GridFieldTitleHeader(),
-				$editableColumns,
-				new GridFieldButtonRow(),
-				new GridFieldAddNewInlineButton(),
-				new GridFieldDeleteAction()
-			);
-		$optionsGrid = GridField::create(
-			'CustomOptions',
-			'CustomOptions',
-			$this->CustomOptions(),
-			$optionsConfig
-		);
-		$fields->insertAfter(new Tab('CustomOptions'), 'Main');
-		$fields->addFieldToTab('Root.CustomOptions', $optionsGrid);
+            ->addComponents(
+                new GridFieldToolbarHeader(),
+                new GridFieldTitleHeader(),
+                $editableColumns,
+                new GridFieldButtonRow(),
+                new GridFieldAddNewInlineButton(),
+                new GridFieldDeleteAction()
+            );
+        $optionsGrid = GridField::create(
+            'CustomOptions',
+            'CustomOptions',
+            $this->CustomOptions(),
+            $optionsConfig
+        );
+        $fields->insertAfter(new Tab('CustomOptions'), 'Main');
+        $fields->addFieldToTab('Root.CustomOptions', $optionsGrid);
 
 
         return $fields;
@@ -111,50 +112,54 @@ class EditableCampaignMonitorField extends EditableFormField
     /**
      * @return NumericField
      */
-    public function getFormField() {
+    public function getFormField()
+    {
         $fieldType = $this->config()->defaultFieldType;
         if ($fieldType == 'DropdownField' || $fieldType == 'CheckboxSetField' || $fieldType == 'OptionsetField') {
             $field = $fieldType::create($this->Name, $this->EscapedTitle, $this->getOptionsMap());
-        } else{
+        } else {
             $field = $fieldType::create($this->Name, $this->EscapedTitle);
         }
 
         $defaultOption = $this->getDefaultOptions()->first();
-		if ($defaultOption) {
-			$field->setValue($defaultOption->EscapedTitle);
-		}
+        if ($defaultOption) {
+            $field->setValue($defaultOption->EscapedTitle);
+        }
 
         $this->doUpdateFormField($field);
         return $field;
     }
 
     /**
-	 * Gets map of field options suitable for use in a form
-	 *
-	 * @return array
-	 */
-	protected function getOptionsMap() {
-		$optionSet = $this->CustomOptions();
-		$optionMap = $optionSet->map('EscapedTitle', 'Title');
-		if ($optionMap instanceof SS_Map) {
-			return $optionMap->toArray();
-		}
-		return $optionMap;
-	}
+     * Gets map of field options suitable for use in a form
+     *
+     * @return array
+     */
+    protected function getOptionsMap()
+    {
+        $optionSet = $this->CustomOptions();
+        $optionMap = $optionSet->map('EscapedTitle', 'Title');
+        if ($optionMap instanceof SS_Map) {
+            return $optionMap->toArray();
+        }
+        return $optionMap;
+    }
 
-	/**
-	 * Returns all default options
-	 *
-	 * @return SS_List
-	 */
-	protected function getDefaultOptions() {
-		return $this->CustomOptions()->filter('Default', 1);
-	}
+    /**
+     * Returns all default options
+     *
+     * @return SS_List
+     */
+    protected function getDefaultOptions()
+    {
+        return $this->CustomOptions()->filter('Default', 1);
+    }
 
     /**
      * @return Boolean/Result
      */
-    public function getValueFromData($data) {
+    public function getValueFromData($data)
+    {
         // if this field was set and there are lists - subscriper the user
         if (isset($data[$this->Name]) && $this->getLists()->Count() > 0) {
             $this->extend('beforeValueFromData', $data);
@@ -181,14 +186,16 @@ class EditableCampaignMonitorField extends EditableFormField
     /**
      * @return Boolean
      */
-    public function getFieldValidationOptions() {
-		return false;
-	}
+    public function getFieldValidationOptions()
+    {
+        return false;
+    }
 
     /**
      * @return ArrayList
      */
-    public function getLists() {
+    public function getLists()
+    {
         require_once '../vendor/campaignmonitor/createsend-php/csrest_clients.php';
 
         $auth = array('api_key' => $this->config()->get('api_key'));
@@ -197,15 +204,13 @@ class EditableCampaignMonitorField extends EditableFormField
         $result = $wrap->get_lists();
         $cLists = array();
         if ($result->was_successful()) {
-
             foreach ($result->response as $list) {
-                $cLists[] = new ArrayData(array("ListID" => $list->ListID , "Name" => $list->Name));
+                $cLists[] = new ArrayData(array("ListID" => $list->ListID, "Name" => $list->Name));
             }
         }
 
         $this->extend('updateLists', $cLists);
 
         return new ArrayList($cLists);
-
     }
 }
