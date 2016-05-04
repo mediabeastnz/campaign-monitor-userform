@@ -14,8 +14,8 @@
     "issues": "https://github.com/mediabeastnz/campaign-monitor-userform/issues"
   },
   "require": {
-    "silverstripe/framework": "3.1.*",
-    "silverstripe/cms": "3.1.*",
+    "silverstripe/framework": "~3.1",
+    "silverstripe/cms": "~3.1",
     "silverstripe/userforms": "@stable",
     "campaignmonitor/createsend-php": "4.1.*"
   },
