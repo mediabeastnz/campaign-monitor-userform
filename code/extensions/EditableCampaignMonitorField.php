@@ -163,12 +163,11 @@ class EditableCampaignMonitorField extends EditableFormField
         // if this field was set and there are lists - subscriper the user
         if (isset($data[$this->Name]) && $this->getLists()->Count() > 0) {
             $this->extend('beforeValueFromData', $data);
-            require_once '../vendor/campaignmonitor/createsend-php/csrest_subscribers.php';
             $auth = array(null, 'api_key' => $this->config()->get('api_key'));
-            $wrap = new CS_REST_Subscribers($this->getField('ListID'), $auth);
+            $wrap = new CS_REST_Subscribers($this->owner->getField('ListID'), $auth);
             $result = $wrap->add(array(
-                'EmailAddress' => $data[$this->getField('EmailField')],
-                'Name' => $data[$this->getField('FirstNameField')].' '.$data[$this->getField('LastNameField')],
+                'EmailAddress' => $data[$this->owner->getField('EmailField')],
+                'Name' => $data[$this->owner->getField('FirstNameField')].' '.$data[$this->owner->getField('LastNameField')],
                 'Resubscribe' => true
             ));
 
@@ -196,8 +195,6 @@ class EditableCampaignMonitorField extends EditableFormField
      */
     public function getLists()
     {
-        require_once '../vendor/campaignmonitor/createsend-php/csrest_clients.php';
-
         $auth = array('api_key' => $this->config()->get('api_key'));
         $wrap = new CS_REST_Clients($this->config()->get('client_id'), $auth);
 
