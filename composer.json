@@ -17,7 +17,7 @@
     "silverstripe/framework": "~3.1",
     "silverstripe/cms": "~3.1",
     "silverstripe/userforms": "@stable",
-    "campaignmonitor/createsend-php": "4.1.*"
+    "campaignmonitor/createsend-php": "5.*"
   },
   "extra": {
     "installer-name": "campaign-monitor-userform"
