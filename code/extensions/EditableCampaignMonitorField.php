@@ -31,6 +31,7 @@ class EditableCampaignMonitorField extends EditableFormField
      * @var array Fields on the user defined form page.
      */
     private static $db = array(
+        'FieldType' => 'Varchar(255)',
         'ListID' => 'Varchar(255)',
         'EmailField' => 'Varchar(255)',
         'FirstNameField' => 'Varchar(255)',
@@ -69,6 +70,15 @@ class EditableCampaignMonitorField extends EditableFormField
             DropdownField::create("FirstNameField", 'First Name Field', $currentFromFields)->setAttribute("disabled", $fieldsStatus),
             DropdownField::create("LastNameField", 'Last Name Field', $currentFromFields)->setAttribute("disabled", $fieldsStatus),
             LiteralField::create("CampaignMonitorEnd", "<h4>Other Configuration</h4>"),
+            DropdownField::create("FieldType", 'Field Type', array(
+                "HiddenField" => "HiddenField",
+                "DropdownField" => "DropdownField",
+                "OptionsetField" => "OptionsetField",
+                "CheckboxSetField" => "CheckboxSetField",
+                "TextField" => "TextField",
+            ))
+                ->setEmptyString("Seelct a field type")
+                ->setDescription("Default field type is Checkbox"),
         ), 'Type');
 
         $editableColumns = new GridFieldEditableColumns();
@@ -114,13 +124,19 @@ class EditableCampaignMonitorField extends EditableFormField
      */
     public function getFormField()
     {
+        // get default field type from config or from users selection
         $fieldType = $this->config()->defaultFieldType;
+        // check if it's different to the default
+        if($this->FieldType != $fieldType) {
+            $fieldType = $this->FieldType;
+        }
+        // ensure format and data is correct based on type
         if ($fieldType == 'DropdownField' || $fieldType == 'CheckboxSetField' || $fieldType == 'OptionsetField') {
             $field = $fieldType::create($this->Name, $this->EscapedTitle, $this->getOptionsMap());
         } else {
             $field = $fieldType::create($this->Name, $this->EscapedTitle);
         }
-
+        // set defaults
         $defaultOption = $this->getDefaultOptions()->first();
         if ($defaultOption) {
             $field->setValue($defaultOption->EscapedTitle);
@@ -165,13 +181,27 @@ class EditableCampaignMonitorField extends EditableFormField
             $this->extend('beforeValueFromData', $data);
             $auth = array(null, 'api_key' => $this->config()->get('api_key'));
             $wrap = new CS_REST_Subscribers($this->owner->getField('ListID'), $auth);
-            $result = $wrap->add(array(
+
+            $custom_fields = $this->extend('addCustomFields', $data);
+
+            $dataToSend = array(
                 'EmailAddress' => $data[$this->owner->getField('EmailField')],
                 'Name' => $data[$this->owner->getField('FirstNameField')].' '.$data[$this->owner->getField('LastNameField')],
-                'Resubscribe' => true
-            ));
+                'Resubscribe' => true,
+                'CustomFields' => $custom_fields[0]
+
+                // 'CustomFields' => array(
+                //     array(
+                //         'Key' => 'i_am_a',
+                //         'Value' => $submission->I_am_a
+                //     )
+                // ),
+            );
+
+            $result = $wrap->add($dataToSend);
 
             $this->extend('afterValueFromData', $result);
+
             if ($result->was_successful()) {
                 return "Subscribed with code ".$result->http_status_code;
             } else {
