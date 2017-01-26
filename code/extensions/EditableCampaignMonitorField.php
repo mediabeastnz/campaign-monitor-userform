@@ -127,7 +127,7 @@ class EditableCampaignMonitorField extends EditableFormField
         // get default field type from config or from users selection
         $fieldType = $this->config()->defaultFieldType;
         // check if it's different to the default
-        if($this->FieldType != $fieldType) {
+        if(isset($this->FieldType) && $this->FieldType != $fieldType) {
             $fieldType = $this->FieldType;
         }
         // ensure format and data is correct based on type
