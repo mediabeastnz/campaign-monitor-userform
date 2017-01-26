@@ -76,9 +76,10 @@ class EditableCampaignMonitorField extends EditableFormField
                 "OptionsetField" => "OptionsetField",
                 "CheckboxSetField" => "CheckboxSetField",
                 "TextField" => "TextField",
+                "CheckboxField" => "CheckboxField"
             ))
-                ->setEmptyString("Seelct a field type")
-                ->setDescription("Default field type is Checkbox"),
+                ->setEmptyString("Select a field type")
+                ->setDescription("Default type is CheckboxField"),
         ), 'Type');
 
         $editableColumns = new GridFieldEditableColumns();
@@ -127,9 +128,10 @@ class EditableCampaignMonitorField extends EditableFormField
         // get default field type from config or from users selection
         $fieldType = $this->config()->defaultFieldType;
         // check if it's different to the default
-        if(isset($this->FieldType) && $this->FieldType != $fieldType) {
+        if(!empty($this->FieldType) && $this->FieldType != $fieldType) {
             $fieldType = $this->FieldType;
         }
+
         // ensure format and data is correct based on type
         if ($fieldType == 'DropdownField' || $fieldType == 'CheckboxSetField' || $fieldType == 'OptionsetField') {
             $field = $fieldType::create($this->Name, $this->EscapedTitle, $this->getOptionsMap());
