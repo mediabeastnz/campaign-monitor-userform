@@ -189,13 +189,6 @@ class EditableCampaignMonitorField extends EditableFormField
                 'Name' => $data[$this->owner->getField('FirstNameField')].' '.$data[$this->owner->getField('LastNameField')],
                 'Resubscribe' => true,
                 'CustomFields' => $custom_fields[0]
-
-                // 'CustomFields' => array(
-                //     array(
-                //         'Key' => 'i_am_a',
-                //         'Value' => $submission->I_am_a
-                //     )
-                // ),
             );
 
             $result = $wrap->add($dataToSend);
