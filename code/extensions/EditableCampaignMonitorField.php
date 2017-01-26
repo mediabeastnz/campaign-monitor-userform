@@ -182,7 +182,8 @@ class EditableCampaignMonitorField extends EditableFormField
             $auth = array(null, 'api_key' => $this->config()->get('api_key'));
             $wrap = new CS_REST_Subscribers($this->owner->getField('ListID'), $auth);
 
-            $custom_fields = $this->extend('addCustomFields', $data);
+            $custom_fields = $this->addCustomFields($data);
+            if (empty($custom_fields)) { $custom_fields = array(); }
 
             $dataToSend = array(
                 'EmailAddress' => $data[$this->owner->getField('EmailField')],
@@ -232,5 +233,28 @@ class EditableCampaignMonitorField extends EditableFormField
         $this->extend('updateLists', $cLists);
 
         return new ArrayList($cLists);
+    }
+
+    /**
+     * @return Array
+     */
+    public function addCustomFields(Array $data)
+    {
+        $custom_fields = array();
+        // loop through the submitted data and check for custom fields
+        foreach($data as $key=>$value){
+            if(count(explode('customfield_',$key)) > 1){
+                $custom_fields[] = array("Key" => substr($key, 12), "Value" => $value);
+            }
+        }
+
+        $this->extend('updateCustomFields', $custom_fields);
+
+        // check if any custom fields were found
+        if(count($custom_fields) > 0) {
+            return $custom_fields;
+        }
+
+        return array();
     }
 }
