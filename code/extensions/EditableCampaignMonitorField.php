@@ -246,7 +246,17 @@ class EditableCampaignMonitorField extends EditableFormField
         // loop through the submitted data and check for custom fields
         foreach($data as $key=>$value){
             if(count(explode('customfield_',$key)) > 1){
-                $custom_fields[] = array("Key" => substr($key, 12), "Value" => $value);
+                if(is_array($value)){
+                    $newValue = '';
+                    $i=1;
+                    foreach($value as $k => $v){
+                        $newValue .= $i == 1 ? $v : '||' . $v;
+                        $i++;
+                    }
+                    $custom_fields[] = array("Key" => substr($key, 12), "Value" => $newValue);
+                } else {
+                    $custom_fields[] = array("Key" => substr($key, 12), "Value" => $value);
+                }
             }
         }
 
